@@ -4,3 +4,4 @@ opencv-python-headless
 Flask
 tensorflow
 werkzeug
+gunicorn
