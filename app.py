@@ -7,6 +7,12 @@ from werkzeug.utils import secure_filename
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Dropout, GlobalAveragePooling2D
 from tensorflow.keras.applications import MobileNetV2
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2' 
+
+import tensorflow as tf
+
+tf.config.threading.set_inter_op_parallelism_threads(1)
+tf.config.threading.set_intra_op_parallelism_threads(1)
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -16,7 +22,7 @@ if not os.path.exists('uploads'):
     os.makedirs('uploads')
 
 # ---------------------------------------------------------
-# MODEL ARCHITECTURE (Matches your Colab Training exactly)
+# MODEL ARCHITECTURE 
 # ---------------------------------------------------------
 input_layer = Input(shape=(256, 256, 3))  
 base_model = MobileNetV2(include_top=False, weights=None, input_tensor=input_layer)
