@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pneumonia Classifier AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0A2463;
+            --secondary-blue: #3E92CC;
+            --accent-cyan: #00E5FF;
+            --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2ca1bd);
+            --surface-white: #ffffff;
+            --text-dark: #1A1A1A;
+            --text-light: #F0F0F0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .card {
+            background-color: var(--surface-white);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        p.subtitle {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        /* Custom File Upload Styling */
+        .file-upload-wrapper {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .file-upload-input {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        .file-upload-label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            border: 2px dashed var(--secondary-blue);
+            border-radius: 8px;
+            background-color: #f8fbff;
+            color: var(--secondary-blue);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .file-upload-label:hover {
+            background-color: #e6f2ff;
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #555;
+            word-break: break-all;
+        }
+
+        .submit-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+        }
+
+        .submit-btn:hover {
+            background-color: #071945;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .submit-btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Results Area */
+        #result-container {
+            margin-top: 25px;
+            padding: 15px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: none; /* Hidden by default */
+        }
+
+        .result-normal {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .result-pneumonia {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            color: var(--secondary-blue);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Pneumonia Classifier AI</h2>
+        <p class="subtitle">Upload a chest CT image for automated analysis using MobileNetV2.</p>
+
+        <form id="uploadForm">
+            <div class="file-upload-wrapper">
+                <input type="file" id="file" name="file" class="file-upload-input" accept="image/*" required onchange="updateFileName()">
+                <label for="file" class="file-upload-label">
+                    <span style="font-size: 2rem; margin-bottom: 10px;">📁</span>
+                    <span>Click to select CT-Image</span>
+                </label>
+                <div id="file-name-display" class="file-name">No file selected</div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="submit-btn">Analyze Image</button>
+        </form>
+
+        <div id="result-container"></div>
+    </div>
+
+    <script>
+        // Update the text when a user selects a file
+        function updateFileName() {
+            const input = document.getElementById('file');
+            const nameDisplay = document.getElementById('file-name-display');
+            if (input.files && input.files.length > 0) {
+                nameDisplay.textContent = input.files[0].name;
+            } else {
+                nameDisplay.textContent = "No file selected";
+            }
+        }
+
+        // Handle the form submission via Fetch API
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault(); // Prevent standard page reload
+
+            const fileInput = document.getElementById('file');
+            const resultContainer = document.getElementById('result-container');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (fileInput.files.length === 0) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            // Set loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = "Processing...";
+            resultContainer.style.display = "block";
+            resultContainer.className = "loading";
+            resultContainer.textContent = "Analyzing CT-Image... please wait.";
+
+            // Prepare the file data
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                // Send file to your Flask backend
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+
+                // Display results
+                if (data.error) {
+                    resultContainer.className = "result-pneumonia";
+                    resultContainer.textContent = "Error: " + data.error;
+                } else {
+                    if (data.result === "Normal") {
+                        resultContainer.className = "result-normal";
+                        resultContainer.innerHTML = "Diagnosis: <strong>Normal</strong> ✅";
+                    } else {
+                        resultContainer.className = "result-pneumonia";
+                        resultContainer.innerHTML = "Diagnosis: <strong>Pneumonia Detected</strong> ⚠️";
+                    }
+                }
+            } catch (error) {
+                resultContainer.className = "result-pneumonia";
+                resultContainer.textContent = "An error occurred connecting to the server.";
+            } finally {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Analyze Image";
+            }
+        });
+    </script>
+
+</body>
+</html>
