@@ -73,3 +73,6 @@ python app.py
 
 ##  Disclaimer
 This project is for **educational and research purposes only** and should not be used as a substitute for professional medical advice, diagnosis, or treatment.
+
+##  Author
+**[Karthik Kuru](https://www.linkedin.com/in/karthikkuru/)**
