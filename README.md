@@ -41,6 +41,7 @@ This application utilizes a custom-built **MobileNetV2** architecture to classif
 ├── static
    └── css
    └── js
+├── Dockerfile                              # Docker configuration for cloud deployment
 ├── requirements.txt                        # Python dependencies
 ├── Pneumonia_Classifie.ipynb               # Jupyter Notebook with complete model training code
 ├── final_trained_model.h5                  # Trained model weights 
