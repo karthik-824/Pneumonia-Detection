@@ -1,6 +1,6 @@
 #  Pneumonia Classifier 
 
-A high-performance deep learning web application designed to assist in the automated analysis of chest CT-Scan images for the detection of pneumonia. Built with **TensorFlow/Keras** and deployed via **Docker** on **Hugging Faces**.
+A high-performance deep learning web application designed to assist in the automated analysis of chest CT-Scan images for the detection of pneumonia. Built with **TensorFlow/Keras** and deployed via **Docker** on **Hugging Face**.
 
 [Try the Live App on Hugging Face](https://huggingface.co/spaces/Karthik-24/Pneumonia-Classifier)
 
