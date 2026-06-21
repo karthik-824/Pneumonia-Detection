@@ -5,9 +5,9 @@ A high-performance deep learning web application designed to assist in the autom
 [Try the Live App on Hugging Face](https://huggingface.co/spaces/Karthik-24/Pneumonia-Classifier)
 
 ##  Preview
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/ce377c40-cd57-44cd-93de-d1de09dc83c4" />
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/5f0f9c8e-5582-4bbc-a7f5-9eae9d708b63" />
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/5a509e16-0018-4bf5-b35e-b425e55daaea" />
+<img width="1000" height="700" alt="image" src="https://github.com/user-attachments/assets/ce377c40-cd57-44cd-93de-d1de09dc83c4" />
+<img width="1000" height="700" alt="image" src="https://github.com/user-attachments/assets/5f0f9c8e-5582-4bbc-a7f5-9eae9d708b63" />
+<img width="1000" height="700" alt="image" src="https://github.com/user-attachments/assets/5a509e16-0018-4bf5-b35e-b425e55daaea" />
 
 ##  Project Overview & Features
 
